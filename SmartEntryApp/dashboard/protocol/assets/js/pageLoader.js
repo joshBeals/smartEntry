@@ -20,6 +20,16 @@ const AddVisitors = () => {
 	.catch(err => console.log(err));
 }
 
+const RegStudents = () => {
+	document.querySelector('#copy').style.display = 'none';
+	fetch('addStudent.html')
+	.then(res => res.text())
+	.then(data => {
+		document.querySelector('#appBody').innerHTML = data;
+	})
+	.catch(err => console.log(err));
+}
+
 const LoadTable = (firstLink, secondLink) => {
 	document.querySelector('#appBody').innerHTML = '';
 	document.querySelector('#main-name').innerHTML = secondLink;
@@ -67,6 +77,8 @@ const signStudentsIn = () => {
     fetch(`http://159.65.185.132:8888/smartentry/allstudent/${token}`)
 	.then(res => res.json())
 	.then(data => {
+		document.querySelector('#table').innerHTML = `<h4 class="card-title">Table</h4><br>
+		<input onkeyup="searchStdSignIn()" class="form-control" type="text" placeholder="Search..." id="search">`;
 		document.querySelector('#thead').innerHTML = 
 		`<tr>
 			<th>S/N</th>
@@ -95,7 +107,7 @@ const signStudentsIn = () => {
 					<td>${std.Department}</td>
 					<td>${std.Faculty}</td>
 					<td>${std.Status}</td>
-					<td><div class="btn btn-primary btn-sm" onclick="updateStatus('1', '${std.matric_no}')">SignIn</div></td>
+					<td><div class="btn btn-primary btn-sm" onclick="updateStatus(1,'${std.matric_no}')">SignIn</div></td>
 				</tr>`;
 			}
 		});
@@ -111,6 +123,8 @@ const signStudentsOut = () => {
     fetch(`http://159.65.185.132:8888/smartentry/allstudent/${token}`)
 	.then(res => res.json())
 	.then(data => {
+		document.querySelector('#table').innerHTML = `<h4 class="card-title">Table</h4><br>
+		<input onkeyup="searchStdSignOut()" class="form-control" type="text" placeholder="Search..." id="search">`;
 		document.querySelector('#thead').innerHTML = 
 		`<tr>
 			<th>S/N</th>
@@ -126,7 +140,6 @@ const signStudentsOut = () => {
 		document.querySelector('#tbody').innerHTML = '';
 		let i = 0;
 		data.forEach(std => {
-			// alert(std.matric_no);
 			if(std.Status == 'present'){
 				i++;
 				document.querySelector('#tbody').innerHTML += 
@@ -139,7 +152,7 @@ const signStudentsOut = () => {
 					<td>${std.Department}</td>
 					<td>${std.Faculty}</td>
 					<td>${std.Status}</td>
-					<td><div class="btn btn-primary btn-sm" onclick="updateStatus('0', '${std.matric_no}')">SignOut</div></td>
+					<td><div class="btn btn-primary btn-sm" onclick="updateStatus(0,'${std.matric_no}')">SignOut</div></td>
 				</tr>`;
 			}
 		});
@@ -155,7 +168,7 @@ const updateStatus = (id,matric) => {
 	fetch('http://159.65.185.132:8888/smartentry/updatestudentstatus', {
         method: 'POST',
         headers: {
-            'Accept':'application/json, text/plain/ */*',
+            'Accept':'application/json',
             'Content-type':'application/json'
         },
         body:JSON.stringify({
@@ -164,10 +177,15 @@ const updateStatus = (id,matric) => {
             token : token
         })
     })
-    .then(res => res.text())
+    .then(res => res.json())
     .then(data => { 
-		// console.log(data);
-		signStudentsOut(); signStudentsIn();
+		alert(data.message);
+		if(id == 1){
+			signStudentsIn();
+		}else if (id == 0){
+			signStudentsOut();
+		}	
+		
     })
     .catch(err => console.log(err))
 }
@@ -180,6 +198,8 @@ const viewStudents = () => {
     fetch(`http://159.65.185.132:8888/smartentry/allstudent/${token}`)
 	.then(res => res.json())
 	.then(data => {
+		document.querySelector('#table').innerHTML = `<h4 class="card-title">Table</h4><br>
+		<input onkeyup="searchStudents()" class="form-control" type="text" placeholder="Search..." id="search">`;
 		document.querySelector('#thead').innerHTML = 
 		`<tr>
 			<th>S/N</th>
@@ -219,6 +239,8 @@ const signVisitorsOut = () => {
     fetch(`http://159.65.185.132:8888/smartentry/allvisitors/${token}`)
 	.then(res => res.json())
 	.then(data => {
+		document.querySelector('#table').innerHTML = `<h4 class="card-title">Table</h4><br>
+		<input onkeyup="searchVisOut()" class="form-control" type="text" placeholder="Search..." id="search">`;
 		document.querySelector('#thead').innerHTML = 
 		`<tr>
 			<th>ID</th>
@@ -233,11 +255,13 @@ const signVisitorsOut = () => {
 			<th>Action</th>
 		</tr>`;
 		document.querySelector('#tbody').innerHTML = '';
+		let id = 0;
 		data.forEach(visitor => {
-			if(visitor.time_out === 'Not yet'){
+			if(visitor.time_out == 'Not yet' || visitor.time_out == ' Not yet'){
+				id++
 				document.querySelector('#tbody').innerHTML += 
 				`<tr>
-					<td>${visitor.Id}</td>
+					<td>${id}</td>
 					<td>${visitor.firstName}</td>
 					<td>${visitor.lastName}</td>
 					<td>${visitor.email}</td>
@@ -246,7 +270,7 @@ const signVisitorsOut = () => {
 					<td>${visitor.Who_to_meet}</td>
 					<td>${visitor.Reason_for_meet}</td>
 					<td>${visitor.time_in}</td>
-					<td><div class="btn btn-primary btn-sm" onclick="visitorOut('${visitor.Id}')">SignOut</div></td>
+					<td><div class="btn btn-primary btn-sm" onclick="visitorOut('${visitor.mobile}')">SignOut</div></td>
 				</tr>`;
 			}
 		});
@@ -262,7 +286,7 @@ const visitorOut = (id) => {
 	fetch('http://159.65.185.132:8888/smartentry/signoutvisitor', {
         method: 'POST',
         headers: {
-            'Accept':'application/json, text/plain/ */*',
+            'Accept':'application/json',
             'Content-type':'application/json'
         },
         body:JSON.stringify({
@@ -270,40 +294,95 @@ const visitorOut = (id) => {
             token : token
         })
     })
-    .then(res => res.text())
+    .then(res => res.json())
     .then(data => { 
-        // console.log(data);
+        alert(data.message);
     })
     .catch(err => console.log(err))
+}
+
+const newStudent = () => {
+	let token = getCookie('token');
+    if(!token){
+        window.location.replace("../../index.html");
+	}
+	if(
+		document.querySelector('#firstname').value != '' &&
+		document.querySelector('#lastname').value != '' &&
+		document.querySelector('#matric').value != '' &&
+		document.querySelector('#sex').value != '' &&
+		document.querySelector('#fac').value != '' &&
+		document.querySelector('#dept').value != '' &&
+		document.querySelector('#email').value != '' &&
+		document.querySelector('#mobile').value != ''
+	){
+		fetch('http://159.65.185.132:8888/smartentry/registerstudent', {
+			method: 'POST',
+			headers: {
+				'Accept':'application/json',
+				'Content-type':'application/json'
+			},
+			body:JSON.stringify({
+				first_name : document.querySelector('#firstname').value,
+				last_name : document.querySelector('#lastname').value,
+				matric_no : document.querySelector('#matric').value,
+				sex : document.querySelector('#sex').value,
+				Faculty : document.querySelector('#fac').value,
+				Department : document.querySelector('#dept').value,
+				parent_email : document.querySelector('#email').value ,
+				parent_mobile : document.querySelector('#mobile').value,
+				token : token
+			})
+		})
+		.then(res => res.json())
+		.then(data => {
+			alert(data.message);
+		})
+		.catch(err => console.log(err))
+	}else{
+		alert('Fields Cannot Be Left Empty!!!');
+	}
 }
 
 const visitorIn = () => {
 	let token = getCookie('token');
     if(!token){
         window.location.replace("../../index.html");
-    }
-    fetch('http://159.65.185.132:8888/smartentry/visitorrequest', {
-        method: 'POST',
-        headers: {
-            'Accept':'application/json, text/plain/ */*',
-            'Content-type':'application/json'
-        },
-        body:JSON.stringify({
-            firstName : document.querySelector('#firstname').value,
-            lastName : document.querySelector('#lastname').value,
-            email : document.querySelector('#email').value,
-            phone : document.querySelector('#mobile').value,
-            Who_to_meet : document.querySelector('#wtm').value,
-            Reason_for_meet : document.querySelector('#rfm').value,
-            address : document.querySelector('#address').value,
-            token : token
-        })
-    })
-    .then(res => res.text())
-    .then(data => {
-		// console.log(data);
-	})
-    .catch(err => console.log(err))
+	}
+	if(
+		document.querySelector('#firstname').value != '' &&
+		document.querySelector('#lastname').value != '' &&
+		document.querySelector('#email').value != '' &&
+		document.querySelector('#mobile').value != '' &&
+		document.querySelector('#wtm').value != '' &&
+		document.querySelector('#rfm').value != '' &&
+		document.querySelector('#address').value != ''
+	){
+		fetch('http://159.65.185.132:8888/smartentry/visitorrequest', {
+			method: 'POST',
+			headers: {
+				'Accept':'application/json',
+				'Content-type':'application/json'
+			},
+			body:JSON.stringify({
+				firstName : document.querySelector('#firstname').value,
+				lastName : document.querySelector('#lastname').value,
+				email : document.querySelector('#email').value,
+				mobile : document.querySelector('#mobile').value,
+				Who_to_meet : document.querySelector('#wtm').value,
+				Reason_for_meet : document.querySelector('#rfm').value,
+				address : document.querySelector('#address').value,
+				token : token
+			})
+		})
+		.then(res => res.json())
+		.then(data => {
+			alert(data.message);
+		})
+		.catch(err => console.log(err))
+	}else{
+		alert('Fields Cannot Be Left Empty!!!');
+	}
 }
 
 const viewVisitors = () => {
@@ -314,6 +393,8 @@ const viewVisitors = () => {
     fetch(`http://159.65.185.132:8888/smartentry/allvisitors/${token}`)
 	.then(res => res.json())
 	.then(data => {
+		document.querySelector('#table').innerHTML = `<h4 class="card-title">Table</h4><br>
+		<input onkeyup="searchVisitors()" class="form-control" type="text" placeholder="Search..." id="search">`;
 		document.querySelector('#thead').innerHTML = 
 		`<tr>
 			<th>ID</th>
@@ -328,10 +409,12 @@ const viewVisitors = () => {
 			<th>Time Out</th>
 		</tr>`;
 		document.querySelector('#tbody').innerHTML = '';
+		let id = 0;
 		data.forEach(visitor => {
+			id++;
 			document.querySelector('#tbody').innerHTML += 
 			`<tr>
-				<td>${visitor.Id}</td>
+				<td>${id}</td>
 				<td>${visitor.firstName}</td>
 				<td>${visitor.lastName}</td>
 				<td>${visitor.email}</td>
@@ -345,6 +428,22 @@ const viewVisitors = () => {
 		});
 	})
 	.catch(err => console.log(err))
+}
+
+const logout = () => {
+	setCookie("user", '', 1);
+	setCookie("fac", '', 1);
+	setCookie("dept", '', 1);
+	setCookie("token", '', 1);
+	window.location.replace("../../index.html");
+}
+
+// function to set cookie
+function setCookie(cname, cvalue, exdays) {
+    let d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    let expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 
 // get or read cookie

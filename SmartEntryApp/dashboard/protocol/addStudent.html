@@ -28,7 +28,7 @@
 		<div class="content">
 			<div class="page-inner">
 				<div class="page-header">
-					<h4 class="page-title">Add New Visitors</h4>
+					<h4 class="page-title">Register New Student</h4>
 					<ul class="breadcrumbs">
 						<li class="nav-home">
 							<a href="#">
@@ -39,13 +39,13 @@
 							<i class="flaticon-right-arrow"></i>
 						</li>
 						<li class="nav-item">
-							<a href="#">Visitors Platform</a>
+							<a href="#">Students Platform</a>
 						</li>
 						<li class="separator">
 							<i class="flaticon-right-arrow"></i>
 						</li>
 						<li class="nav-item">
-							<a href="#">Add New Visitors</a>
+							<a href="#">Register Student</a>
 						</li>
 					</ul>
 				</div>
@@ -70,40 +70,97 @@
                                         </div>
                                         <div class="row">
                                             <div class="form-group col-md-6">
-                                                <label for="email2">Email Address</label>
+                                                <label for="matric">Matric Number</label>
+                                                <input type="text" class="form-control" id="matric" placeholder="Enter Matric Number">
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="sex">Sex</label>
+                                                <select class="form-control" id="sex">
+                                                    <option>Male</option>
+                                                    <option>Female</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label for="fac">Faculty</label>
+                                                <select class="form-control" id="fac">
+													<option value='SSE'>SSE</option>
+													<option value='SMS'>SMS</option>
+													<option value='AGR'>AGR</option>
+													<option value='HUM'>HUM</option>
+													<option value='CHS'>CHS</option>
+													<option value='EDU'>EDU</option>
+													<option value='LAW'>LAW</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="dept">Department</label>
+                                                <select class="form-control" id="dept">
+													<option value='LAW'>LAW</option>
+
+                                                    <option value='CIT'>CIT</option>
+													<option value='BIOCHEM'>BIOCHEM</option>
+													<option value='MCB'>MCB</option>
+													<option value='BIO'>BIO</option>
+													<option value='CHEM'>CHEM</option>
+													<option value='ICH'>ICH</option>
+													<option value='MTH'>MTH</option>
+													<option value='STA'>STA</option>
+													<option value='PHY'>PHY</option>
+
+													<option value='COMART'>COMART</option>
+													<option value='ENG'>ENG</option>
+													<option value='HIS'>HIS</option>
+													<option value='THART'>THART</option>
+													<option value='MUS'>MUS</option>
+													<option value='REL'>REL</option>
+
+													<option value='ACC'>ACC</option>
+													<option value='BUS'>BUS</option>
+													<option value='ECN'>ECN</option>
+													<option value='MASSCOM'>MASSCOM</option>
+													<option value='SOC'>SOC</option>
+													<option value='POL'>POL</option>
+													<option value='IRL'>IRL</option>
+													<option value='IRPM'>IRPM</option>
+
+													<option value='ANA'>ANA</option>
+													<option value='PHY'>PHY</option>
+													<option value='NUR'>NUR</option>
+													<option value='PHYSIO'>PHYSIO</option>
+													<option value='MEDLAB'>MEDLAB</option>
+													<option value='PUBH'>PUBH</option>
+													<option value='MBBS'>MBBS</option>
+
+													<option value='ELECT'>ELECT</option>
+													<option value='MECHATRONICS'>MECHATRONICS</option>
+													<option value='LIB'>LIB</option>
+
+													<option value='AGREXT'>AGREXT</option>
+													<option value='AGRECN'>AGRECN</option>
+													<option value='ANIMALSC'>ANIMALSC</option>
+													<option value='FOREST'>FOREST</option>
+													<option value='CROP'>CROP</option>
+													<option value='FST'>FST</option>
+													<option value='NUT'>NUT</option>
+													<option value='FISHAQ'>FISHAQ</option>
+                                                </select>
+                                            </div>  
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label for="email">Parent Email</label>
                                                 <input type="email" class="form-control" id="email" placeholder="Enter Email">
                                                 <small id="emailHelp2" class="form-text text-muted">We'll never share your email with anyone else.</small>
                                             </div>
                                             <div class="form-group col-md-6">
-                                                <label for="mobile">Phone Number</label>
+                                                <label for="mobile">Parent Number</label>
                                                 <input type="number" class="form-control" id="mobile" placeholder="Enter Phone number">
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="form-group col-md-6">
-                                                <label for="address">Address</label>
-                                                <input type="text" class="form-control" id="address" placeholder="Enter Address">
-                                            </div>
-                                            <div class="form-group col-md-6">
-												<label for="sex">Sex</label>
-												<select class="form-control" id="sex">
-													<option>Male</option>
-													<option>Female</option>
-												</select>
-											</div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-md-6">
-                                                <label for="wtm">Who To Meet</label>
-                                                <input type="text" class="form-control" id="wtm" placeholder="Enter Name of person to meet">
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                                <label for="rfm">Reason For Meeting</label>
-                                                <input type="text" class="form-control" id="rfm" placeholder="Enter your reason for meeting">
-                                            </div>
-                                        </div>
                                         <div class="row mt-3">
-                                            <button class="btn btn-primary ml-2" onclick="visitorIn()">SignIn</button>
+                                            <button class="btn btn-primary ml-2" onclick="newStudent()">Register</button>
                                             <button class="btn btn-danger ml-2">Cancel</button>
                                         </div>
                                     </div>

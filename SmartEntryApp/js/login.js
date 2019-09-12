@@ -20,7 +20,7 @@ const login = () => {
             	body:JSON.stringify({
                     id : id.value,
                     user_name : username.value,
-                    password : password.value 
+                    password : password.value
             	})
             })
             .then(res => res.json())
@@ -29,14 +29,18 @@ const login = () => {
                 if(data.response_code == '00'){
                     if(id.value == '1'){
                         setCookie("token", data.token, 1);
-                        setCookie("user", username.value, 1);
+                        setCookie("user", username.value.toUpperCase(), 1);
                         window.location.replace("./dashboard/protocol");
                     }else if(id.value == '2'){
-                        setCookie("token", data.token, 1);
-                        window.location.replace("./dashboard/faculty");
-                    }else if(id.value == '3'){
+                        let dept = username.value.slice(0,-5);
+                        setCookie("dept", dept.toUpperCase(), 1);
                         setCookie("token", data.token, 1);
                         window.location.replace("./dashboard/department");
+                    }else if(id.value == '3'){
+                        let fac = username.value.slice(0,-5);
+                        setCookie("fac", fac.toUpperCase(), 1);
+                        setCookie("token", data.token, 1);
+                        window.location.replace("./dashboard/faculty");
                     }
                 }
             })

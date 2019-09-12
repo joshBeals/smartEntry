@@ -242,7 +242,7 @@ body a:hover {
 }
 body {
     font-family: 'Mukta', sans-serif;
-    height: 100vh;
+    min-height: 100vh;
 }
 .main {
     background: url('../images/pattern.jpg');
@@ -252,7 +252,7 @@ body {
     -o-background-size: cover;
     -ms-background-size: cover;
 	position: relative;
-    height: 100%;
+    min-height: 100vh;
     position: relative;
 }
 .layer {
